@@ -1,0 +1,1 @@
+set PATH=C:\python\Python35-x64\Scripts\;C:\python\Python35-x64\;%PATH%
