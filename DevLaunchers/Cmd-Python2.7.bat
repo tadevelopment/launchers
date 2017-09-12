@@ -1,3 +1,3 @@
-set PATH=c:\python\Python27\Scripts\;c:\python\Python27\;%PATH%
-SET PYTHONHOME=C:\python\Python27
+set PATH=C:\python\Python27-x64\Scripts\;C:\python\Python27-x64\;%PATH%
+SET PYTHONHOME=C:\python\Python27-x64
 cmd;

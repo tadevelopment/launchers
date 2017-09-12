@@ -4,14 +4,24 @@ SET FABRIC_VERSION=%1
 SET TARGET=%2
 SET FABRIC_LIB_VERSION=%FABRIC_VERSION:~0,3%
 
-SET QT_DIR=C:\External\Qt\4.8.6-x64-msvc2013\
+SET EXTERNAL_DIR=D:\External
+SET FABRIC_ROOT=%EXTERNAL_DIR%\Fabric
+
+REM By default we use Python27-x64
+SET PATH=C:\python\Python27-x64\Scripts\;C:\python\Python27-x64\;%PATH%
+SET PYTHONHOME=C:\python\Python27-x64
+
+SET QT_DIR=%EXTERNAL_DIR%\Qt\4.8.6-x64-msvc2013\
 SET CPP2KL_PATH=D:\src\TADevelopment\Cpp2KL\
-SET ARNOLD_DIR=C:\External\ArnoldSDK\Windows-4.2.11.0\
+SET ARNOLD_DIR=%EXTERNAL_DIR%\ArnoldSDK\Windows-4.2.11.0\
 SET VECTOR_RENDERER=D:\src\RnD_edgedetect\
 SET SHIBOKEN_PYSIDE_DIR=c:\python\Python27-x64\Lib\site-packages\PySide
-SET PATH=%PATH%;C:\External\CMake\bin;C:\External\Git\bin
+SET PATH=%PATH%;%EXTERNAL_DIR%\CMake\bin;%EXTERNAL_DIR%\Git\bin
+SET TENSORFLOW_CAPI=%EXTERNAL_DIR%\Tensorflow\libs
 
-SET TBB_PATH=D:\External\TBB\tbb2017_20160916oss\
+SET TBB_PATH=%EXTERNAL_DIR%\TBB\tbb2017_20160916oss\
+
+set ANDROID_HOME=C:\Program Files (x86)\Android\android-sdk
 
 call "C:\Program Files\Autodesk\Softimage 2015\Application\bin\setenv.bat"
 
@@ -24,10 +34,10 @@ IF NOT DEFINED FABRIC_BUILD_TYPE (
 
 IF NOT "%FABRIC_VERSION%" == "" (
   IF "%FABRIC_VERSION%" == "Daily" (
-    FOR /F "delims=" %%i IN ('dir /b /ad-h /t:c /od C:\External\FabricEngine*') DO SET FABRIC_DIR=%%i
-    CALL "C:\External\!FABRIC_DIR!\environment.bat" 
+    FOR /F "delims=" %%i IN ('dir /b /ad-h /t:c /od %FABRIC_ROOT%\Fabric*') DO SET FABRIC_DIR=%%i
+    CALL "%FABRIC_ROOT%\!FABRIC_DIR!\environment.bat" 
   ) ELSE (
-    CALL "C:\External\FabricEngine-%FABRIC_VERSION%-Windows-x86_64\environment.bat"
+    CALL "%FABRIC_ROOT%\FabricEngine-%FABRIC_VERSION%-Windows-x86_64\environment.bat"
   )
 )
 REM ECHO %FABRIC_DIR%
@@ -68,18 +78,18 @@ REM set FABRIC_EXTS_PATH=%FABRIC_EXTS_PATH%;%KRAKEN_PATH%\Exts;
 REM set FABRIC_DFG_PATH=%FABRIC_DFG_PATH%;%KRAKEN_PATH%\Presets\DFG;
 REM set PYTHONPATH=%PYTHONPATH%;%KRAKEN_PATH%\Python;
 
-CALL "D:\src\TADevelopment\scatter-brained-master\Scatter-brained\environment.bat"
-CALL "D:\src\TADevelopment\scatter-brained-master\Scatter-brained-tests\environment.bat"
-REM CALL "C:\src\Groove-Jones\environment.bat"
+SET SCATTERB_MASTER=C:\src\TADevelopment\scatter-brained-master
+CALL "%SCATTERB_MASTER%\Scatter-brained\environment.bat"
+CALL "%SCATTERB_MASTER%\Scatter-brained-tests\environment.bat"
 
 REM "Start in R:"
 ECHO "Fabric is setup at %FABRIC_DIR%"
-D:
-CD D:\src
-
 
 IF "%2" == "VS2015" (
     GOTO :START_VS2015
+)
+IF "%2" == "VS2017" (
+    GOTO :START_VS2017
 )
 IF "%2" == "XSI" (
     GOTO :START_XSI
@@ -123,6 +133,10 @@ REM ////////////////////////////////////////////////
 START "" "C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe"
 GOTO :EOF
 
+:START_VS2017
+START "" "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\devenv.exe"
+GOTO :EOF
+
 :START_XSI
 START "" "C:\Program Files\Autodesk\Softimage 2015\Application\bin\XSI.bat"
 GOTO :EOF
@@ -142,7 +156,7 @@ CALL python "%FABRIC_DIR%/bin/canvas.py"
 GOTO :EOF
 
 :START_VSCODE
-START "" "C:\Program Files (x86)\Microsoft VS Code\Code.exe"
+START "" "C:\Program Files\Microsoft VS Code Insiders\Code - Insiders.exe"
 GOTO :EOF
 
 :START_SCATTERB
@@ -158,7 +172,7 @@ CALL %comspec% /k ""c:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvar
 GOTO :EOF
 
 :START_VS_ADSKQT
-SET QT_DIR=C:\External\Qt\qt-adsk-4.8.6
+SET QT_DIR=%EXTERNAL_DIR%\Qt\qt-adsk-4.8.6
 GOTO :START_VS2015
 
 :EOF
