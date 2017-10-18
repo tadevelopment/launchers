@@ -8,11 +8,11 @@ SET EXTERNAL_DIR=D:\External
 SET FABRIC_ROOT=%EXTERNAL_DIR%\Fabric
 
 REM By default we use Python27-x64
-SET PATH=C:\python\Python27-x64\Scripts\;C:\python\Python27-x64\;%PATH%
+SET PATH=C:\python\Python27-x64\;C:\python\Python27-x64\Scripts\;%PATH%
 SET PYTHONHOME=C:\python\Python27-x64
 
 SET QT_DIR=%EXTERNAL_DIR%\Qt\4.8.6-x64-msvc2013\
-SET CPP2KL_PATH=D:\src\TADevelopment\Cpp2KL\
+SET CPP2KL_PATH=c:\src\TADevelopment\Cpp2KL\
 SET ARNOLD_DIR=%EXTERNAL_DIR%\ArnoldSDK\Windows-4.2.11.0\
 SET VECTOR_RENDERER=D:\src\RnD_edgedetect\
 SET SHIBOKEN_PYSIDE_DIR=c:\python\Python27-x64\Lib\site-packages\PySide
@@ -34,8 +34,8 @@ IF NOT DEFINED FABRIC_BUILD_TYPE (
 
 IF NOT "%FABRIC_VERSION%" == "" (
   IF "%FABRIC_VERSION%" == "Daily" (
-    FOR /F "delims=" %%i IN ('dir /b /ad-h /t:c /od %FABRIC_ROOT%\Fabric*') DO SET FABRIC_DIR=%%i
-    CALL "%FABRIC_ROOT%\!FABRIC_DIR!\environment.bat" 
+    REM FOR /F "delims=" %%i IN ('dir /b /ad-h /t:c /od %FABRIC_ROOT%\Fabric-e*') DO SET FABRIC_DIR=%%i
+    CALL "%FABRIC_ROOT%\FabricEngine-escher-Windows-x86_64-20170817-100710\environment.bat" 
   ) ELSE (
     CALL "%FABRIC_ROOT%\FabricEngine-%FABRIC_VERSION%-Windows-x86_64\environment.bat"
   )
@@ -81,8 +81,8 @@ REM set PYTHONPATH=%PYTHONPATH%;%KRAKEN_PATH%\Python;
 SET SCATTERB_MASTER=C:\src\TADevelopment\scatter-brained-master
 CALL "%SCATTERB_MASTER%\Scatter-brained\environment.bat"
 CALL "%SCATTERB_MASTER%\Scatter-brained-tests\environment.bat"
+CALL "%SCATTERB_MASTER%\scatter-brained-ik\FabricTensorflow\environment.bat"
 
-REM "Start in R:"
 ECHO "Fabric is setup at %FABRIC_DIR%"
 
 IF "%2" == "VS2015" (
@@ -112,7 +112,6 @@ IF "%2" == "VSCode" (
 )
 IF "%2" == "ScatterBrained" (
     GOTO :START_SCATTERB
-    GOTO :EOF
 )
 if "%2" == "Prompt" (
   REM Default to Prompt
@@ -160,7 +159,8 @@ START "" "C:\Program Files\Microsoft VS Code Insiders\Code - Insiders.exe"
 GOTO :EOF
 
 :START_SCATTERB
-CALL python "%SCATTERB_ROOT%/apps/clip_viewer/app.py"
+ECHO "---- Starting ScatterBrained ----"
+START "" "python" "%SCATTERB_ROOT%/apps/clip_viewer/app.py"
 GOTO :EOF
 
 :START_PROMPT
@@ -176,4 +176,4 @@ SET QT_DIR=%EXTERNAL_DIR%\Qt\qt-adsk-4.8.6
 GOTO :START_VS2015
 
 :EOF
-TIMEOUT /t 3
+TIMEOUT /t 5
